@@ -1,7 +1,24 @@
-import React, { createRef } from 'react'
-import { StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
+import React, { createRef, HtmlHTMLAttributes } from 'react'
+import { KeyboardTypeOptions, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import Icon from '@expo/vector-icons/Ionicons'
 import { color, style } from '../../styles'
+
+interface Props {
+    label?: string,
+    onPress?: () => void,
+    textLeft?: string | boolean,
+    value: string,
+    onChangeText: () => void,
+    password?: boolean,
+    keyboardType?: KeyboardTypeOptions | undefined,
+    placeholder?: string,
+    reset?: boolean,
+    iconLeft?: React.ComponentProps<typeof Icon>['name'],
+    iconRight?: React.ComponentProps<typeof Icon>['name'],
+    iconRightColor?: string,
+    subtitle?: string,
+    error?: boolean,
+}
 
 const Input = ({
     label,
@@ -18,12 +35,12 @@ const Input = ({
     iconRightColor,
     subtitle,
     error,
-}) => {
+}: Props) => {
 
-    const resets = createRef()
+    const resets = React.createRef<TextInput>()
 
     const handleReset = () => {
-        resets.current.clear()
+        resets.current?.clear()
     }
 
     return (

@@ -3,13 +3,17 @@ import { Text, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { connect } from 'react-redux'
 
-import { Button, FlexRow } from '../../components/atoms'
+import { Button, FlexRow, Select } from '../../components/atoms'
 import { GetDateTime, TableView } from '../../components/organisms'
 
 import * as userActions from '../../store/user/actions'
-import { Cities, Scheduler } from '../../store/Interface'
+import { Cities, Scheduler } from '../../utils/Interface'
 
 import { color, paddingTopStatusBar, size, style } from '../../styles'
+import { GET_CITIES, GET_SCHEDULER } from '../../store/user/configs'
+import { publicAction } from '../../store/sagas/publicAction'
+import { useNavigation } from '@react-navigation/native'
+import { DefaultNavigationProps } from '../../utils/Types'
 
 interface Props {
     setLoading: (bool: boolean) => void;
@@ -20,27 +24,29 @@ interface Props {
     loadingScheduler: boolean;
     getCities: () => void;
     getScheduler: (payload: any) => void;
+    citySelected: string;
+    navigation: DefaultNavigationProps<'Home'>
 }
 
 const Home: FC<Props> = props => {
 
     const {
-        setLoading,
-        user,
-        cities,
-        loadingCities,
-        scheduler,
-        loadingScheduler,
-        getCities,
-        getScheduler,
+        navigation,
+        user, cities, scheduler, citySelected,
+        setLoading, loadingCities, loadingScheduler,
+        getCities, getScheduler,
     } = props
+
 
     useEffect(() => {
         getDataCities()
+        getDataScheduler(citySelected)
     }, [])
 
-    const getDataCities = () => {
-        getCities()
+    const getDataCities = () => getCities()
+
+    const getDataScheduler = (city: string) => {
+        getScheduler({ city })
     }
 
     const logout = () => {
@@ -59,6 +65,7 @@ const Home: FC<Props> = props => {
             </FlexRow>
             <View style={style.body}>
                 <GetDateTime />
+                <Select onPress={() => navigation.navigate('ListCities')} value={cities.find(e => e.city === citySelected)?.name} />
                 <TableView />
                 <Button title='Keluar' onPress={logout} />
             </View>
@@ -74,13 +81,14 @@ const mapStateToProps = (state: any) => {
         loadingCities: user.loadingCities,
         scheduler: user.scheduler,
         loadingScheduler: user.loadingScheduler,
+        citySelected: user.citySelected
     }
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
     setLoading: (bool: boolean) => dispatch(userActions.setLoading(bool)),
-    getCities: () => dispatch(userActions.getCities()),
-    getScheduler: (payload: any) => dispatch(userActions.getScheduler(payload)),
+    getCities: () => dispatch(publicAction(GET_CITIES.FETCH, [])),
+    getScheduler: (payload: any) => dispatch(publicAction(GET_SCHEDULER.FETCH, payload)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

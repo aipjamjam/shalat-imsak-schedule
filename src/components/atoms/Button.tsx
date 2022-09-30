@@ -1,8 +1,20 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
+import { StyleSheet, Text, TouchableHighlight, View, ViewStyle } from 'react-native'
 import Icon from '@expo/vector-icons/Ionicons'
 
 import { color } from '../../styles'
+
+interface Props {
+    onPress: () => void,
+    outStyle?: ViewStyle,
+    title: string,
+    iconRight?: React.ComponentProps<typeof Icon>['name'],
+    itemColor?: string,
+    secondary?: boolean,
+    iconLeft?: React.ComponentProps<typeof Icon>['name'],
+    disabled?: boolean,
+    added?: boolean,
+}
 
 const Button = ({
     onPress = () => { },
@@ -14,7 +26,7 @@ const Button = ({
     iconLeft,
     disabled,
     added,
-}) => {
+}: Props) => {
     return (
         <TouchableHighlight underlayColor='transparent' disabled={disabled} onPress={onPress} style={[outStyle, styles.outStyle]}>
             <View style={[styles.wrapper, { backgroundColor: added ? color.secondary : disabled ? color.g400 : secondary ? color.p8 : color.primary, }]}>

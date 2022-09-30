@@ -1,4 +1,4 @@
-import { width, height, style, paddingTopStatusBar } from './style'
+import { width, height, style, paddingTopStatusBar, forSlide, forSlideHorizontal } from './style'
 import { color } from './colors'
 
 const size = {
@@ -11,4 +11,6 @@ export {
     size,
     color,
     paddingTopStatusBar,
+    forSlide,
+    forSlideHorizontal,
 }

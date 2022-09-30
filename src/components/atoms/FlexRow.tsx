@@ -1,5 +1,14 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, ViewStyle } from 'react-native'
+
+interface Props {
+    children: React.ReactNode,
+    center?: boolean,
+    spaceBetween?: boolean,
+    spaceAround?: boolean,
+    flexEnd?: boolean,
+    style?: ViewStyle,
+}
 
 const FlexRow = ({
     children,
@@ -8,7 +17,7 @@ const FlexRow = ({
     spaceAround,
     flexEnd,
     style,
-}) => {
+}: Props) => {
     return (
         <View
             style={[style, {
